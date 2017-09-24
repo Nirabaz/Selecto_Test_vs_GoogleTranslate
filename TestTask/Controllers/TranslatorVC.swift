@@ -98,26 +98,23 @@ extension TranslatorVC{
     }
     
     func addNewHystoryItem(input: String, output: String){
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
-        let newHistoryItem = NSEntityDescription.insertNewObject(forEntityName: "HistItem", into: context)
-        
-        let date = NSDate()
-        let calendar = NSCalendar.current
-        let hour = calendar.component(.hour, from: date as Date)
-        let minutes = calendar.component(.minute, from: date as Date)
-        
-        newHistoryItem.setValue("\(input) - \(output)", forKey: "words")
-        newHistoryItem.setValue("\(hour):\(minutes)", forKey: "translationDate")
-        
-        do{
-            try context.save()
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            let newHistoryItem = NSEntityDescription.insertNewObject(forEntityName: "HistItem", into: context)
+            let date = NSDate()
+            let calendar = NSCalendar.current
+            let hour = calendar.component(.hour, from: date as Date)
+            let minutes = calendar.component(.minute, from: date as Date)
+            newHistoryItem.setValue("\(input) - \(output)", forKey: "words")
+            newHistoryItem.setValue("\(hour):\(minutes)", forKey: "translationDate")
+            do{
+                try context.save()
                 self.getHystory()
+                print("saved")
+            }catch let error as NSError{
+                print(error.localizedDescription)
             }
-            print("saved")
-        }catch let error as NSError{
-            print(error.localizedDescription)
         }
     }
     
