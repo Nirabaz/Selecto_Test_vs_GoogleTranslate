@@ -85,7 +85,7 @@ extension TranslatorVC{
                         for val in dict!{
                             translatedString = translatedString + String(describing: val)
                         }
-                        DispatchQueue.main.async { // Correct
+                        DispatchQueue.main.async {
                             self.outputField.text = translatedString
                         }
                         self.addNewHystoryItem(input: stringForTranslate!, output: translatedString)
@@ -112,7 +112,9 @@ extension TranslatorVC{
         
         do{
             try context.save()
-            getHystory()
+            DispatchQueue.main.async {
+                self.getHystory()
+            }
             print("saved")
         }catch let error as NSError{
             print(error.localizedDescription)
